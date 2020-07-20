@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import ActivityScreen from './src/screens/ActivityScreen';
 
 export default function App() {
   return (
-    <View>
+    <>
+      <StatusBar barStyle="dark-content" backgroundColor={'#ff9900'} />
       <ActivityScreen />
-    </View>
+    </>
   );
 }
