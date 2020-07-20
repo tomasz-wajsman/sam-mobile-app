@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "sam-mobile-app",
+    "name": "Sports Activity Manager",
+    "slug": "sam",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
