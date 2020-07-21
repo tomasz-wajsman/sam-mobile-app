@@ -3,36 +3,34 @@ import { Modal, Card, Button, Paragraph, Portal, TextInput, HelperText } from 'r
 
 import util from '../../util';
 
+const defaults = {
+  input: {
+    name: '',
+    category: '',
+    startDate: '',
+    endDate: '',
+    distance: ''
+  }, messages: {
+    name: '',
+    category: '',
+    startDate: '',
+    endDate: '',
+    distance: ''
+  }, inputCorrect: {
+    name: false,
+    category: false,
+    startDate: true,
+    endDate: true,
+    distance: true
+  }
+};
+
+
 const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }) => {
   // state
-  const [input, setInput] = useState(
-    {
-      name: details.name || '',
-      category: details.category || '',
-      startDate: details.startDate || '',
-      endDate: details.endDate || '',
-      distance: details.distance || ''
-    }
-  );
-
-  const [messages, setMessages] = useState(
-    {
-      name: '',
-      category: '',
-      startDate: '',
-      endDate: '',
-      distance: ''
-    }
-  );
-  const [inputCorrect, setInputCorrect] = useState(
-    {
-      name: false,
-      category: false,
-      startDate: true,
-      endDate: true,
-      distance: true
-    }  
-  );
+  const [input, setInput] = useState(defaults.input);
+  const [messages, setMessages] = useState(defaults.messages);
+  const [inputCorrect, setInputCorrect] = useState(defaults.inputCorrect);
 
   const handleInput = (field, value) => {
     const temp = { ...input };
@@ -45,8 +43,8 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
   };
 
   const validateInput = (field, value) => {
-    const ic = {...inputCorrect};
-    const msg = {...messages};
+    const ic = { ...inputCorrect };
+    const msg = { ...messages };
     switch (field) {
       case 'name':
         if (value === '') {
@@ -101,6 +99,26 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
     return correct;
   };
 
+  const submitForm = () => {
+    const correct = checkForm();
+    if (!correct) {
+      // form is incorrect, show an alert
+      util.alert.showAlert('Error', 'Some of the inputs values are missing or incorrect. Check them and try again.');
+    } else {
+      if (editing) {
+        // edit an existing activity
+        onConfirm(details['_id'], input);
+      } else {
+        // add a new activity
+        onConfirm(input);
+        setInput(defaults.input);
+      }
+      // clean messages and errors
+      setMessages(defaults.messages);
+      setInputCorrect(defaults.inputCorrect);
+    }
+  };
+
   if (visible) {
     return (
       <Portal>
@@ -146,14 +164,8 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
             </Card.Content>
             {
               editing
-                ? <Button onPress={() => checkForm()
-                  ? onConfirm(details['_id'], input)
-                  : util.alert.showAlert('Error', 'Some of the inputs values are missing or incorrect. Check them and try again.')
-                }>SAVE</Button>
-                : <Button onPress={() => checkForm()
-                  ? onConfirm(input)
-                  : util.alert.showAlert('Error', 'Some of the input values are missing or incorrect. Check them and try again.')
-                }>ADD</Button>
+                ? <Button onPress={() => submitForm()}>SAVE</Button>
+                : <Button onPress={() => submitForm()}>ADD</Button>
             }
             <Button onPress={onDismiss}>HIDE</Button>
           </Card>
