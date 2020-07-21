@@ -7,6 +7,9 @@ const layout = StyleSheet.create({
   },
   horizontal: {
     flexDirection: 'row'
+  },
+  spacing: {
+    marginBottom: 2
   }
 });
 export default layout;

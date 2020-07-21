@@ -8,6 +8,7 @@ const TextInputWithHelper = ({ value, placeholder, onChangeText, helperVisible, 
   return (
     <View style={styles.layout.spacing}>
       <TextInput
+        style={{ padding: 5, height: 24 }}
         value={value || ''}
         placeholder={placeholder || ''}
         onChangeText={onChangeText}
