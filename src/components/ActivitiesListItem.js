@@ -3,7 +3,6 @@ import { List, Card } from 'react-native-paper';
 import util from '../util';
 
 const ActivitiesListItem = ({ details }) => {
-  console.log(details)
   return (
     <Card>
       <Card.Title title={details.name || "Default title"} />
