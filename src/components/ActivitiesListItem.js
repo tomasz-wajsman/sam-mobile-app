@@ -1,8 +1,18 @@
 import React from 'react';
-import { List, Card } from 'react-native-paper';
+import { List, Card, Button, IconButton } from 'react-native-paper';
 import util from '../util';
 
-const ActivitiesListItem = ({ details }) => {
+const ActivitiesListItem = ({ details, onDeleteActivity }) => {
+  const showDeleteAlert = () => {
+    util.alert.showAlert(
+      'Delete an activity',
+      'Do you wish to delete an activity? It will not be longer available',
+      [
+        { text: 'No, keep it' },
+        { text: 'Yes, delete it', onPress: () => onDeleteActivity(details['_id']) }
+      ]
+    );
+  };
   return (
     <Card>
       <Card.Title title={details.name || "Default title"} />
@@ -13,6 +23,7 @@ const ActivitiesListItem = ({ details }) => {
         <List.Item title={`End date: ${util.date.formatDateTime(details.endDate)}`} />
         { details.distance ? <List.Item title={`Distance: ${details.distance} meters`} /> : <></>}
         </List.Accordion>
+        <IconButton icon="trash-can-outline" onPress={showDeleteAlert} />
       </Card.Content>
     </Card>
     /*

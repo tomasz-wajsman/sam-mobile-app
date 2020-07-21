@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Alert } from 'react-native';
 import styles from '../styles';
 import ActivitiesList from '../components/ActivitiesList';
 import ActivityEditorModal from '../components/modals/ActivityEditorModal';
@@ -23,7 +23,13 @@ const ActivityScreen = () => {
   };
   const handleEdit = activityID => {
     // edit an activity
-    handleDismissModal();
+
+  };
+  const handleDelete = activityID => {
+    // delete an activity
+    const temp = [...activities];
+    temp.splice(findActivityIndexByID(activityID), 1);
+    setActivities(temp);
   };
   const handleDismissEditorModal = () => {
     setEditModalVisible(false);
@@ -39,6 +45,7 @@ const ActivityScreen = () => {
       <ActivitiesList
         items={activities}
         onPressAdd={handleAdd}
+        onDeleteActivity={handleDelete}
       />
     </ScrollView>
   )
