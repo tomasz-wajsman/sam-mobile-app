@@ -9,8 +9,11 @@ const checkDateTime = dt => {
   const obj = moment(dt);
   return obj.isValid();
 };
+const unixToDate = unix => {
+  return formatDateTime(unix);
+};
 const dateToUnix = dt => {
-  return new Date(dt);
+  return moment(dt).unix() * 1000;
 };
 const compareDates = (dt1, dt2) => {
   if (!checkDateTime(dt1) || !checkDateTime(dt2)) {
@@ -30,6 +33,7 @@ const compareDates = (dt1, dt2) => {
 export default {
   formatDateTime,
   checkDateTime,
+  unixToDate,
   dateToUnix,
   compareDates
 };
