@@ -17,13 +17,21 @@ const ActivityScreen = () => {
   const [selectedActivityID, setSelectedActivityID] = useState('')
 
   const findActivityIndexByID = activityID => activities.findIndex(activity => activity['_id'] === activityID);
-  const handleAdd = () => {
+  const handleAdd = activityDetails => {
     // add an activity
-    
+    const temp = [...activities];
+    const details = {...activityDetails};
+    details['_id'] = activityDetails.name; // TO-DO: change it
+    temp.push(details);
+    setActivities(temp);
   };
-  const handleEdit = activityID => {
+  const handleEdit = (activityID, activityDetails) => {
     // edit an activity
-
+    const temp = [...activities];
+    const details = activityDetails;
+    details['_id'] = activityID; // TO-DO: change it
+    temp[findActivityIndexByID(activityID)] = activityDetails;
+    setActivities(temp);
   };
   const handleDelete = activityID => {
     // delete an activity
@@ -41,6 +49,8 @@ const ActivityScreen = () => {
         details={null}
         visible={false}
         onDismiss={handleDismissEditorModal}
+        onAddActivity={handleAdd}
+        onEditActivity={handleEdit}
       />
       <ActivitiesList
         items={activities}
