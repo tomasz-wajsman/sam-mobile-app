@@ -52,6 +52,7 @@ const ActivityScreen = () => {
       // edit mode
       setEditMode(true);
     }
+    setSelectedActivityID(findActivityIndexByID(activityID));
     setModifyModalVisible(true);
   };
 
@@ -60,21 +61,22 @@ const ActivityScreen = () => {
       // edit mode
       return (
         <ActivityEditorModal
-          details={null}
+          details={activities[selectedActivityID] || {}}
           editing={true}
           visible={modifyModalVisible}
           onDismiss={handleDismissEditorModal}
-          onAddActivity={handleAdd}
+          onConfirm={handleEdit}
         />
       );
     }
     // add mode
     return (
       <ActivityEditorModal
+        details={{}}
         editing={false}
         visible={modifyModalVisible}
         onDismiss={handleDismissEditorModal}
-        onEditActivity={handleEdit}
+        onConfirm={handleAdd}
       />
     );
   };
