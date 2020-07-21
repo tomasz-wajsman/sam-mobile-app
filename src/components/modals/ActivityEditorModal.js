@@ -3,6 +3,7 @@ import { Modal, Card, Button, Paragraph, Portal, TextInput, HelperText } from 'r
 
 import util from '../../util';
 import TextInputWithHelper from '../input/TextInput';
+import { ScrollView } from 'react-native';
 
 const defaults = {
   input: {
@@ -151,59 +152,61 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
     return (
       <Portal>
         <Modal visible={visible} onDismiss={onDismiss}>
-          <Card>
-            <Card.Title title={editing ? "Editing an activity" : "Adding an activity"} />
-            <Card.Content>
-              <TextInputWithHelper
-                value={input.name}
-                placeholder="Activity name"
-                onChangeText={text => handleInput('name', text)}
-                helperVisible={!inputCorrect.name}
-                helperType={'error'}
-                helperText={messages.name}
-              />
-              <TextInputWithHelper
-                value={input.category}
-                placeholder="Category name"
-                onChangeText={text => handleInput('category', text)}
-                helperVisible={!inputCorrect.category}
-                helperType={'error'}
-                helperText={messages.category}
-              />
-              <TextInputWithHelper
-                value={input.startDate}
-                placeholder="Start date"
-                onChangeText={text => handleInput('startDate', text)}
-                helperVisible={!inputCorrect.startDate}
-                helperType={'error'}
-                helperText={messages.startDate}
-                additionalHelperText={'Date format: YYYY-MM-DD HH:mm:SS'}
-              />
-              <TextInputWithHelper
-                value={input.endDate}
-                placeholder="End date"
-                onChangeText={text => handleInput('endDate', text)}
-                helperVisible={!inputCorrect.endDate}
-                helperType={'error'}
-                helperText={messages.endDate}
-                additionalHelperText={'Date format: YYYY-MM-DD HH:mm:SS'}
-              />
-              <TextInputWithHelper
-                value={input.distance}
-                placeholder="Distance"
-                onChangeText={text => handleInput('distance', text)}
-                helperVisible={!inputCorrect.distance}
-                helperType={'error'}
-                helperText={messages.distance}
-              />
-            {
-              editing
-                ? <Button onPress={() => submitForm()}>SAVE</Button>
-                : <Button onPress={() => submitForm()}>ADD</Button>
-            }
-            <Button onPress={onDismiss}>HIDE</Button>
-            </Card.Content>
-          </Card>
+          <ScrollView>
+            <Card>
+              <Card.Title title={editing ? "Editing an activity" : "Adding an activity"} />
+              <Card.Content>
+                <TextInputWithHelper
+                  value={input.name}
+                  placeholder="Activity name"
+                  onChangeText={text => handleInput('name', text)}
+                  helperVisible={!inputCorrect.name}
+                  helperType={'error'}
+                  helperText={messages.name}
+                />
+                <TextInputWithHelper
+                  value={input.category}
+                  placeholder="Category name"
+                  onChangeText={text => handleInput('category', text)}
+                  helperVisible={!inputCorrect.category}
+                  helperType={'error'}
+                  helperText={messages.category}
+                />
+                <TextInputWithHelper
+                  value={input.startDate}
+                  placeholder="Start date"
+                  onChangeText={text => handleInput('startDate', text)}
+                  helperVisible={!inputCorrect.startDate}
+                  helperType={'error'}
+                  helperText={messages.startDate}
+                  additionalHelperText={'Date format: YYYY-MM-DD HH:mm'}
+                />
+                <TextInputWithHelper
+                  value={input.endDate}
+                  placeholder="End date"
+                  onChangeText={text => handleInput('endDate', text)}
+                  helperVisible={!inputCorrect.endDate}
+                  helperType={'error'}
+                  helperText={messages.endDate}
+                  additionalHelperText={'Date format: YYYY-MM-DD HH:mm'}
+                />
+                <TextInputWithHelper
+                  value={input.distance}
+                  placeholder="Distance"
+                  onChangeText={text => handleInput('distance', text)}
+                  helperVisible={!inputCorrect.distance}
+                  helperType={'error'}
+                  helperText={messages.distance}
+                />
+                {
+                  editing
+                    ? <Button onPress={() => submitForm()}>SAVE</Button>
+                    : <Button onPress={() => submitForm()}>ADD</Button>
+                }
+                <Button onPress={onDismiss}>HIDE</Button>
+              </Card.Content>
+            </Card>
+          </ScrollView>
         </Modal>
       </Portal>
     );
