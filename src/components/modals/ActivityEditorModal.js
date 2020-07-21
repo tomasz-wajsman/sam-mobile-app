@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Card, Button, Paragraph, Portal, TextInput, HelperText } from 'react-native-paper';
 
 import util from '../../util';
+import TextInputWithHelper from '../input/TextInput';
 
 const defaults = {
   input: {
@@ -43,6 +44,7 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
   };
 
   const validateInput = (field, value) => {
+    const dtRegex = new RegExp(/^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9])$/);
     const ic = { ...inputCorrect };
     const msg = { ...messages };
     switch (field) {
@@ -64,6 +66,32 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
         } else {
           msg.category = '';
           ic.category = true;
+        }
+        break;
+      case 'startDate':
+        // start date
+        if (value === '') {
+          msg.startDate = 'Start date is empty';
+          ic.startDate = false;
+        } else if (!dtRegex.test(value)) {
+          msg.startDate = 'Start date is incorrect';
+          ic.startDate = false;
+        } else {
+          msg.startDate = '';
+          ic.startDate = true;
+        }
+        break;
+      case 'endDate':
+        // category
+        if (value === '') {
+          msg.endDate = 'End date is empty';
+          ic.endDate = false;
+        } else if (!dtRegex.test(value)) {
+          msg.endDate = 'End date is incorrect';
+          ic.endDate = false;
+        } else {
+          msg.endDate = '';
+          ic.endDate = true;
         }
         break;
       case 'distance':
@@ -126,48 +154,53 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
           <Card>
             <Card.Title title={editing ? "Editing an activity" : "Adding an activity"} />
             <Card.Content>
-              <TextInput
-                placeholder="Activity name"
+              <TextInputWithHelper
                 value={input.name}
+                placeholder="Activity name"
                 onChangeText={text => handleInput('name', text)}
+                helperVisible={!inputCorrect.name}
+                helperType={'error'}
+                helperText={messages.name}
               />
-              <HelperText type="error" visible={messages.name !== ''}>
-                {messages.name}
-              </HelperText>
-              <TextInput
-                placeholder="Category"
+              <TextInputWithHelper
                 value={input.category}
+                placeholder="Category name"
                 onChangeText={text => handleInput('category', text)}
+                helperVisible={!inputCorrect.category}
+                helperType={'error'}
+                helperText={messages.category}
               />
-              <HelperText type="error" visible={messages.category !== ''}>
-                {messages.category}
-              </HelperText>
-              <TextInput
-                placeholder="Start date"
+              <TextInputWithHelper
                 value={input.startDate}
+                placeholder="Start date"
                 onChangeText={text => handleInput('startDate', text)}
+                helperVisible={!inputCorrect.startDate}
+                helperType={'error'}
+                helperText={messages.startDate}
               />
-              <TextInput
-                placeholder="End date"
+              <TextInputWithHelper
                 value={input.endDate}
+                placeholder="End date"
                 onChangeText={text => handleInput('endDate', text)}
+                helperVisible={!inputCorrect.endDate}
+                helperType={'error'}
+                helperText={messages.endDate}
               />
-              <TextInput
-                placeholder="Distance (optional)"
+              <TextInputWithHelper
                 value={input.distance}
+                placeholder="Distance"
                 onChangeText={text => handleInput('distance', text)}
-                keyboardType="numeric"
+                helperVisible={!inputCorrect.distance}
+                helperType={'error'}
+                helperText={messages.distance}
               />
-              <HelperText type="error" visible={messages.distance !== ''}>
-                {messages.distance}
-              </HelperText>
-            </Card.Content>
             {
               editing
                 ? <Button onPress={() => submitForm()}>SAVE</Button>
                 : <Button onPress={() => submitForm()}>ADD</Button>
             }
             <Button onPress={onDismiss}>HIDE</Button>
+            </Card.Content>
           </Card>
         </Modal>
       </Portal>
