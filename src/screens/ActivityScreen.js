@@ -39,7 +39,6 @@ const ActivityScreen = () => {
       <ActivitiesList
         items={activities}
         onPressAdd={handleAdd}
-        onPressDetails={handleShowDetails}
       />
     </ScrollView>
   )

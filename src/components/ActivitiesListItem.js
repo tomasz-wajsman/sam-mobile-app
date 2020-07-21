@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Card } from 'react-native-paper';
 import util from '../util';
 
-const ActivitiesListItem = ({ details, onPressDetails }) => {
+const ActivitiesListItem = ({ details }) => {
   console.log(details)
   return (
     <Card>
