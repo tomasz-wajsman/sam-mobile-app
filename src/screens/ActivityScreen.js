@@ -22,7 +22,6 @@ const ActivityScreen = () => {
     // convert dates to Unix
     details.startDate = util.date.dateToUnix(activityDetails.startDate);
     details.endDate = util.date.dateToUnix(activityDetails.endDate);
-    console.log(util.date.dateToUnix(activityDetails.startDate), util.date.dateToUnix(activityDetails.endDate), 'handleesijhodtfjdfgiuhndfijijhdf')
     details['_id'] = activityDetails.name; // TO-DO: change it
     temp.push(details);
     setActivities(temp);
