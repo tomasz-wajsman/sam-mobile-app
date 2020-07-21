@@ -3,7 +3,13 @@ import { View } from 'react-native';
 import { Card, Title, List, Button } from 'react-native-paper';
 import ActivitiesListItem from './ActivitiesListItem';
 
-const ActivitiesList = ({ items, onPressAdd, onPressDetails, onDeleteActivity }) => {
+const ActivitiesList = ({ items, onModify, onDeleteActivity }) => {
+  const add = () => {
+    onModify('add');
+  };
+  const modify = activityID => {
+    onModify('edit', activityID);
+  };
   return (
     <View>
       <Title>Activities</Title>
@@ -12,11 +18,11 @@ const ActivitiesList = ({ items, onPressAdd, onPressDetails, onDeleteActivity })
         <ActivitiesListItem
           key={activity['_id']}
           details={activity}
-          onPressDetails={onPressDetails}
+          onPressEdit={() => modify(activity['_id'])}
           onDeleteActivity={onDeleteActivity}
         />)
       }
-      <Button onPress={onPressAdd}>Add a new entry</Button>
+      <Button onPress={() => add()}>Add a new entry</Button>
     </View>
   );
 };
