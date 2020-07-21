@@ -177,6 +177,7 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
                 helperVisible={!inputCorrect.startDate}
                 helperType={'error'}
                 helperText={messages.startDate}
+                additionalHelperText={'Date format: YYYY-MM-DD HH:mm:SS'}
               />
               <TextInputWithHelper
                 value={input.endDate}
@@ -185,6 +186,7 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss }
                 helperVisible={!inputCorrect.endDate}
                 helperType={'error'}
                 helperText={messages.endDate}
+                additionalHelperText={'Date format: YYYY-MM-DD HH:mm:SS'}
               />
               <TextInputWithHelper
                 value={input.distance}
