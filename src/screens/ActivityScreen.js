@@ -11,10 +11,11 @@ const defaultActivities = [
 ];
 
 const ActivityScreen = () => {
-  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [modifyModalVisible, setModifyModalVisible] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   
   const [activities, setActivities] = useState(defaultActivities);
-  const [selectedActivityID, setSelectedActivityID] = useState('')
+  const [selectedActivityID, setSelectedActivityID] = useState('');
 
   const findActivityIndexByID = activityID => activities.findIndex(activity => activity['_id'] === activityID);
   const handleAdd = activityDetails => {
@@ -40,21 +41,50 @@ const ActivityScreen = () => {
     setActivities(temp);
   };
   const handleDismissEditorModal = () => {
-    setEditModalVisible(false);
+    setModifyModalVisible(false);
+  };
+
+  const handleModify = (mode, activityID) => {
+    if (mode === 'add') {
+      // add mode
+      setEditMode(false);
+    } else if (mode == 'edit') {
+      // edit mode
+      setEditMode(true);
+    }
+    setModifyModalVisible(true);
+  };
+
+  const renderModal = () => {
+    if (editMode) {
+      // edit mode
+      return (
+        <ActivityEditorModal
+          details={null}
+          editing={true}
+          visible={modifyModalVisible}
+          onDismiss={handleDismissEditorModal}
+          onAddActivity={handleAdd}
+        />
+      );
+    }
+    // add mode
+    return (
+      <ActivityEditorModal
+        editing={false}
+        visible={modifyModalVisible}
+        onDismiss={handleDismissEditorModal}
+        onEditActivity={handleEdit}
+      />
+    );
   };
 
   return (
     <ScrollView style={styles.layout.container}>
-      <ActivityEditorModal
-        details={null}
-        visible={false}
-        onDismiss={handleDismissEditorModal}
-        onAddActivity={handleAdd}
-        onEditActivity={handleEdit}
-      />
+      {renderModal()}
       <ActivitiesList
         items={activities}
-        onPressAdd={handleAdd}
+        onModify={handleModify}
         onDeleteActivity={handleDelete}
       />
     </ScrollView>
