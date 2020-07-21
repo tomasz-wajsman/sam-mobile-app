@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import styles from '../styles';
 import ActivitiesList from '../components/ActivitiesList';
-import ActivityDetailsModal from '../components/modals/ActivityDetailsModal';
+import ActivityEditorModal from '../components/modals/ActivityEditorModal';
 
 const defaultActivities = [
   { _id: '111111111111111111111111', name: 'Swimming', category: 'swimming', startDate: 123, endDate: 456, distance: 5000 },
@@ -11,44 +11,37 @@ const defaultActivities = [
 ];
 
 const ActivityScreen = () => {
-  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   
   const [activities, setActivities] = useState(defaultActivities);
   const [selectedActivityID, setSelectedActivityID] = useState('')
 
   const findActivityIndexByID = activityID => activities.findIndex(activity => activity['_id'] === activityID);
-  const handleShowDetails = activityID => {
-    // show activity details
-    setSelectedActivityID(findActivityIndexByID(activityID));
-    setDetailsModalVisible(true);
-  };
   const handleAdd = () => {
     // add an activity
     
-  }
+  };
   const handleEdit = activityID => {
     // edit an activity
     handleDismissModal();
   };
-  const handleDismissDetailsModal = () => {
-    setDetailsModalVisible(false);
+  const handleDismissEditorModal = () => {
+    setEditModalVisible(false);
   };
 
   return (
-    <View style={styles.layout.container}>
-      <ActivityDetailsModal
-        details={activities[selectedActivityID]}
-        visible={detailsModalVisible}
-        onEdit={handleEdit}
-        onDismiss={handleDismissDetailsModal}
+    <ScrollView style={styles.layout.container}>
+      <ActivityEditorModal
+        details={null}
+        visible={false}
+        onDismiss={handleDismissEditorModal}
       />
       <ActivitiesList
         items={activities}
         onPressAdd={handleAdd}
         onPressDetails={handleShowDetails}
       />
-    </View>
+    </ScrollView>
   )
 };
 export default ActivityScreen;
