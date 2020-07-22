@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const dtMask = 'YYYY-MM-DD HH:mm:ss';
+const dtMask = 'YYYY-MM-DD HH:mm';
 
 const formatDateTime = dt => {
   return moment(dt).format(dtMask);
@@ -13,7 +13,7 @@ const unixToDate = unix => {
   return formatDateTime(unix);
 };
 const dateToUnix = dt => {
-  return moment(dt).unix() * 1000;
+  return moment(`${dt}:00`).unix() * 1000;
 };
 const compareDates = (dt1, dt2) => {
   if (!checkDateTime(dt1) || !checkDateTime(dt2)) {
