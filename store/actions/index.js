@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 export const setActivityIndex = activityIndex => ({
-  type: 'ACTIVITY_SET_ID',
+  type: 'ACTIVITY_SET_INDEX',
   activityIndex
 });
 export const addActivity = activity => ({
