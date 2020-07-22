@@ -4,12 +4,12 @@ import { HelperText, TextInput } from 'react-native-paper';
 
 import styles from '../../styles';
 
-const TextInputWithHelper = ({ value, placeholder, onChangeText, helperVisible, helperType, helperText, additionalHelperText }) => {
+const TextInputWithHelper = ({ defaultValue, placeholder, onChangeText, helperVisible, helperType, helperText, additionalHelperText }) => {
   return (
     <View style={styles.layout.spacing}>
       <TextInput
         style={{ padding: 5, height: 24 }}
-        value={value || ''}
+        defaultValue={defaultValue || ''}
         placeholder={placeholder || ''}
         onChangeText={onChangeText}
       />
@@ -22,7 +22,7 @@ const TextInputWithHelper = ({ value, placeholder, onChangeText, helperVisible, 
       }
       <HelperText
         type={helperType}
-        visible={helperVisible}
+        visible={helperText !== ''}
       >
         {helperText}
       </HelperText>
