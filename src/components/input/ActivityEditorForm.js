@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 
@@ -7,13 +7,14 @@ import FormTextInput from './FormTextInput';
 import PropTypes from 'prop-types';
 import util from '../../util';
 import DateTextInput from './DateTextInput';
+import { connect } from 'react-redux';
 
 const defaults = {
   input: {
     name: '',
     category: '',
-    startDate: '',
-    endDate: '',
+    startDate: util.date.unixToDate(Date.now()),
+    endDate: util.date.unixToDate(Date.now()),
     distance: ''
   }, messages: {
     name: '',
@@ -24,7 +25,19 @@ const defaults = {
   }
 };
 
-const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
+const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfirm, onHide }) => {
+  useEffect(() => {
+    if (selectedActivityIndex >= 0) {
+      console.log(details.startDate, details.endDate);
+      setInput({
+        name: details.name,
+        category: details.category,
+        startDate: util.date.unixToDate(details.startDate),
+        endDate: util.date.unixToDate(details.endDate),
+        distance: details.distance
+      });
+    }
+  }, [selectedActivityIndex]);
   // state
   const [input, setInput] = useState(defaults.input);
   const [messages, setMessages] = useState(defaults.messages);
@@ -40,16 +53,14 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
   };
 
   const validateInput = (field, value) => {
-    const dtRegex = new RegExp(/^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9])$/);
+    const dtRegex = new RegExp(/^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (0[0-92|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9])$/);
     const msg = { ...messages };
     switch (field) {
       case 'name':
         if (value === '') {
           msg.name = 'Empty name';
-          ic.name = false;
         } else {
           msg.name = '';
-          ic.name = true;
         }
         // name
         break;
@@ -57,36 +68,28 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
         // category
         if (value === '') {
           msg.category = 'Empty category';
-          ic.category = false;
         } else {
           msg.category = '';
-          ic.category = true;
         }
         break;
       case 'startDate':
         // start date
         if (value === '') {
           msg.startDate = 'Start date is empty';
-          ic.startDate = false;
         } else if (!dtRegex.test(value)) {
           msg.startDate = 'Start date is incorrect';
-          ic.startDate = false;
         } else {
           msg.startDate = '';
-          ic.startDate = true;
         }
         break;
       case 'endDate':
         // category
         if (value === '') {
           msg.endDate = 'End date is empty';
-          ic.endDate = false;
         } else if (!dtRegex.test(value)) {
           msg.endDate = 'End date is incorrect';
-          ic.endDate = false;
         } else {
           msg.endDate = '';
-          ic.endDate = true;
         }
         break;
       case 'distance':
@@ -95,13 +98,10 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
           const distanceNum = Number.parseInt(value);
           if (Number.isNaN(distanceNum)) {
             msg.distance = 'Incorrect distance format';
-            ic.distance = false;
           } else if (distanceNum <= 0) {
             msg.distance = 'Negative or zeroth distance';
-            ic.distance = false;
           } else {
             msg.distance = '';
-            ic.distance = true;
           }
         }
         break;
@@ -130,6 +130,7 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
   return (
     <View>
       <FormTextInput
+        value={input.name}
         defaultValue={details.name}
         placeholder="Activity name"
         onChangeText={text => handleInput('name', text)}
@@ -138,6 +139,7 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
         helperText={messages.name}
       />
       <FormTextInput
+        value={input.category}
         defaultValue={details.category}
         placeholder="Category name"
         onChangeText={text => handleInput('category', text)}
@@ -146,6 +148,7 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
         helperText={messages.category}
       />
       <DateTextInput
+        value={input.startDate}
         defaultValue={util.date.unixToDate(details.startDate)}
         placeholder="Start date"
         onChangeText={text => handleInput('startDate', text)}
@@ -154,6 +157,7 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
         helperText={messages.startDate}
       />
       <DateTextInput
+        value={input.endDate}
         defaultValue={util.date.unixToDate(details.endDate)}
         placeholder="End date"
         onChangeText={text => handleInput('endDate', text)}
@@ -162,6 +166,7 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
         helperText={messages.endDate}
       />
       <FormTextInput
+        value={input.distance}
         defaultValue={details.distance}
         placeholder="Distance"
         onChangeText={text => handleInput('distance', text)}
@@ -169,21 +174,24 @@ const ActivityEditorForm = ({ details, editMode, onConfirm, onHide }) => {
         helperType={'error'}
         helperText={messages.distance}
       />
-      {
-        editMode
-          ? <Button onPress={() => submitForm()}>SAVE</Button>
-          : <Button onPress={() => submitForm()}>ADD</Button>
-      }
-      <Button onPress={hideForm}>HIDE</Button>
+      <Button onPress={() => submitForm()}>{editMode ? 'SAVE' : 'ADD'}</Button>
+      <Button onPress={hideForm}>CANCEL</Button>
     </View>
   );
 };
 
 ActivityEditorForm.propTypes = {
-  details: PropTypes.object 
+  details: PropTypes.object
 };
 ActivityEditorForm.defaultProps = {
   details: {}
 };
 
-export default ActivityEditorForm;
+const mapStateToProps = state => {
+  return {
+    selectedActivityIndex: state.activities.selectedActivityIndex,
+    details: state.activities.items[state.activities.selectedActivityIndex]
+  }
+};
+
+export default connect(mapStateToProps)(ActivityEditorForm);
