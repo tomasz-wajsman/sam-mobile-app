@@ -6,7 +6,7 @@ import ActivityEditorModal from '../components/modals/ActivityEditorModal';
 import util from '../util';
 import { connect } from 'react-redux';
 
-import { setActivityIndex, addActivity, modifyActivity, deleteActivity } from '../../store/actions';
+import { setActivityIndex, addActivity, modifyActivity, deleteActivity } from '../store/actions';
 
 const ActivityScreen = ({ activities, selectedActivityIndex, setActivityIndex, addActivity, modifyActivity, deleteActivity }) => {
   const [modifyModalVisible, setModifyModalVisible] = useState(false);
