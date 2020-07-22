@@ -38,7 +38,8 @@ FormTextInput.propTypes = {
 };
 FormTextInput.defaultProps = {
   defaultValue: '',
-  placeholder: ''
+  placeholder: '',
+  additionalHelperText: ''
 };
 
 export default FormTextInput;
