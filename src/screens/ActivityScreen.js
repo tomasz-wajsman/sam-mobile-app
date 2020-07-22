@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Alert } from 'react-native';
 import styles from '../styles';
 import ActivitiesList from '../components/ActivitiesList';
@@ -6,36 +6,105 @@ import ActivityEditorModal from '../components/modals/ActivityEditorModal';
 import util from '../util';
 import { connect } from 'react-redux';
 
-import { setActivityIndex, addActivity, modifyActivity, deleteActivity } from '../store/actions';
+import { setActivities, setActivityIndex, addActivity, modifyActivity, deleteActivity } from '../store/actions';
 
-const ActivityScreen = ({ activities, selectedActivityIndex, setActivityIndex, addActivity, modifyActivity, deleteActivity }) => {
+// API client
+import SamClient from '../clients/sam';
+import { ActivityIndicator, Paragraph, Card, Button } from 'react-native-paper';
+const client = new SamClient(require('../config/config.json').api_url);
+
+const ActivityScreen = ({
+  activities,
+  selectedActivityIndex,
+  setActivityIndex,
+  setActivities,
+  addActivity,
+  modifyActivity,
+  deleteActivity
+}) => {
+
+  // loading
+  const [loading, setLoading] = useState(true);
+  const [loadingFailed, setLoadingFailed] = useState(false);
+  const [loadingErrorText, setLoadingErrorText] = useState('');
+
+  const loadActivities = () => {
+    let activities;
+    setLoading(true);
+    client.getActivities()
+      .then(res => {
+        activities = res;
+        setLoadingFailed(false);
+      })
+      .catch(err => {
+        activities = [];
+        setLoadingFailed(true);
+        setLoadingErrorText(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        setActivities(activities);
+      });
+  };
+
+  useEffect(() => {
+    // load the activities
+    loadActivities();
+  }, []);
+
   const [modifyModalVisible, setModifyModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   const getActivityIndexByID = activityID => activities.findIndex(activity => activity['_id'] === activityID);
   const getActivityIdByIndex = activityIndex => activities[activityIndex]['_id'];
-  
-  const handleAdd = activityDetails => {
+
+  const handleAdd = async activityDetails => {
     // add an activity
     const details = { ...activityDetails };
-    // convert dates to Unix
-    details.startDate = util.date.dateToUnix(activityDetails.startDate);
-    details.endDate = util.date.dateToUnix(activityDetails.endDate);
-    details['_id'] = activityDetails.name; // TO-DO: change it
-    addActivity(details);
+    try {
+      // convert dates to Unix format
+      details.start_date = util.date.dateToUnix(activityDetails.start_date);
+      details.end_date = util.date.dateToUnix(activityDetails.end_date);
+      // add the activity
+      const res = await client.createActivity(details);
+      if (res) {
+        addActivity(res);
+        setModifyModalVisible(false);
+      }
+    } catch (e) {
+      console.error(err);
+    }
   };
-  const handleEdit = (activityID, activityDetails) => {
+  const handleEdit = async (activityID, activityDetails) => {
     // modify an activity
     const details = { ...activityDetails };
-    // convert dates to Unix
-    details.startDate = util.date.dateToUnix(activityDetails.startDate);
-    details.endDate = util.date.dateToUnix(activityDetails.endDate);
-    details['_id'] = activityID; // TO-DO: change it
-    modifyActivity(selectedActivityIndex, details);
+    try {
+      // convert dates to Unix format
+      details.start_date = util.date.dateToUnix(activityDetails.start_date);
+      details.end_date = util.date.dateToUnix(activityDetails.end_date);
+      // modify the activity
+      const res = await client.modifyActivity(activityID, details);
+      if (res) {
+        modifyActivity(selectedActivityIndex, details);
+        setModifyModalVisible(false);
+        setActivityIndex(-1);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
   const handleDelete = activityID => {
     // delete an activity
-    deleteActivity(getActivityIndexByID(activityID));
+    console.log(activityID)
+    client.deleteActivity(activityID)
+      .then(res => {
+        if (res) {
+          deleteActivity(getActivityIndexByID(activityID));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
   const handleDismissEditorModal = () => {
     setModifyModalVisible(false);
@@ -49,7 +118,6 @@ const ActivityScreen = ({ activities, selectedActivityIndex, setActivityIndex, a
     } else if (mode == 'edit') {
       // edit mode
       setEditMode(true);
-      console.log(getActivityIndexByID(activityID))
       setActivityIndex(getActivityIndexByID(activityID));
     }
     setModifyModalVisible(true);
@@ -80,6 +148,28 @@ const ActivityScreen = ({ activities, selectedActivityIndex, setActivityIndex, a
     );
   };
 
+  // render the app
+  if (loading) {
+    // app is loading
+    return (
+      <ActivityIndicator />
+    );
+  } else if (loadingFailed) {
+    // loading has failed
+    return (
+      <Card>
+        <Card.Title title={"Loading failed"} />
+        <Card.Content>
+          <Paragraph>
+            {`Reason: ${loadingErrorText}`}
+          </Paragraph>
+          <Button onPress={loadActivities}>Retry</Button>
+        </Card.Content>
+      </Card>
+    );
+  }
+
+  // show the list
   return (
     <ScrollView style={styles.layout.container}>
       {renderModal()}
@@ -99,6 +189,7 @@ const mapStateToProps = state => {
   }
 };
 const mapDispatchToProps = {
+  setActivities,
   addActivity,
   modifyActivity,
   deleteActivity,
