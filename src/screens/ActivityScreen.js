@@ -4,44 +4,38 @@ import styles from '../styles';
 import ActivitiesList from '../components/ActivitiesList';
 import ActivityEditorModal from '../components/modals/ActivityEditorModal';
 import util from '../util';
+import { connect } from 'react-redux';
 
-const defaultActivities = [];
+import { setActivityIndex, addActivity, modifyActivity, deleteActivity } from '../../store/actions';
 
-const ActivityScreen = () => {
+const ActivityScreen = ({ activities, selectedActivityIndex, setActivityIndex, addActivity, modifyActivity, deleteActivity }) => {
   const [modifyModalVisible, setModifyModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  
-  const [activities, setActivities] = useState(defaultActivities);
-  const [selectedActivityID, setSelectedActivityID] = useState('');
 
-  const findActivityIndexByID = activityID => activities.findIndex(activity => activity['_id'] === activityID);
+  const getActivityIndexByID = activityID => activities.findIndex(activity => activity['_id'] === activityID);
+  const getActivityIdByIndex = activityIndex => activities[activityIndex]['_id'];
+  
   const handleAdd = activityDetails => {
     // add an activity
-    const temp = [...activities];
-    const details = {...activityDetails};
+    const details = { ...activityDetails };
     // convert dates to Unix
     details.startDate = util.date.dateToUnix(activityDetails.startDate);
     details.endDate = util.date.dateToUnix(activityDetails.endDate);
     details['_id'] = activityDetails.name; // TO-DO: change it
-    temp.push(details);
-    setActivities(temp);
+    addActivity(details);
   };
   const handleEdit = (activityID, activityDetails) => {
-    // edit an activity
-    const temp = [...activities];
-    const details = activityDetails;
+    // modify an activity
+    const details = { ...activityDetails };
     // convert dates to Unix
     details.startDate = util.date.dateToUnix(activityDetails.startDate);
     details.endDate = util.date.dateToUnix(activityDetails.endDate);
     details['_id'] = activityID; // TO-DO: change it
-    temp[findActivityIndexByID(activityID)] = activityDetails;
-    setActivities(temp);
+    modifyActivity(selectedActivityIndex, details);
   };
   const handleDelete = activityID => {
     // delete an activity
-    const temp = [...activities];
-    temp.splice(findActivityIndexByID(activityID), 1);
-    setActivities(temp);
+    deleteActivity(getActivityIndexByID(activityID));
   };
   const handleDismissEditorModal = () => {
     setModifyModalVisible(false);
@@ -51,11 +45,13 @@ const ActivityScreen = () => {
     if (mode === 'add') {
       // add mode
       setEditMode(false);
+      setActivityIndex(-1);
     } else if (mode == 'edit') {
       // edit mode
       setEditMode(true);
+      console.log(getActivityIndexByID(activityID))
+      setActivityIndex(getActivityIndexByID(activityID));
     }
-    setSelectedActivityID(findActivityIndexByID(activityID));
     setModifyModalVisible(true);
   };
 
@@ -64,7 +60,7 @@ const ActivityScreen = () => {
       // edit mode
       return (
         <ActivityEditorModal
-          details={activities[selectedActivityID] || {}}
+          details={activities[selectedActivityIndex] || {}}
           editing={true}
           visible={modifyModalVisible}
           onDismiss={handleDismissEditorModal}
@@ -95,4 +91,18 @@ const ActivityScreen = () => {
     </ScrollView>
   )
 };
-export default ActivityScreen;
+
+const mapStateToProps = state => {
+  return {
+    activities: state.activities.items,
+    selectedActivityIndex: state.activities.selectedActivityIndex
+  }
+};
+const mapDispatchToProps = {
+  addActivity,
+  modifyActivity,
+  deleteActivity,
+  setActivityIndex
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityScreen);
