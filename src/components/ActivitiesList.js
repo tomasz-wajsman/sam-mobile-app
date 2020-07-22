@@ -2,8 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 import { Card, Title, List, Button } from 'react-native-paper';
 import ActivitiesListItem from './ActivitiesListItem';
+import { connect } from 'react-redux';
 
-const ActivitiesList = ({ items, onModify, onDeleteActivity }) => {
+const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
   const add = () => {
     onModify('add');
   };
@@ -14,7 +15,7 @@ const ActivitiesList = ({ items, onModify, onDeleteActivity }) => {
     <View>
       <Title>Activities</Title>
       {
-        items.map(activity => 
+        activities.items.map(activity => 
         <ActivitiesListItem
           key={activity['_id']}
           details={activity}
@@ -26,4 +27,12 @@ const ActivitiesList = ({ items, onModify, onDeleteActivity }) => {
     </View>
   );
 };
-export default ActivitiesList;
+
+const mapStateToProps = state => {
+  return { activities: state.activities }
+};
+const mapDispatchToProps = {
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActivitiesList);
