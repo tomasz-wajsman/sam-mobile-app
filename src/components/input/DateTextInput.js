@@ -12,7 +12,7 @@ const DateTextInput = ({ defaultValue, placeholder, onChangeText, helperVisible,
     <View style={styles.layout.spacing}>
       <PaperTextInput
         style={{ padding: 5, height: 24 }}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue || util.date.unixToDate(Date.now())}
         placeholder={placeholder}
         onChangeText={onChangeText}
       />
@@ -41,7 +41,7 @@ DateTextInput.propTypes = {
 DateTextInput.defaultProps = {
   defaultValue: util.date.unixToDate(0),
   placeholder: '',
-  additionalHelperText: 'Date time format: YYYY-MM-DD HH:mm:SS'
+  additionalHelperText: 'Date time format: YYYY-MM-DD HH:mm'
 };
 
 export default DateTextInput;
