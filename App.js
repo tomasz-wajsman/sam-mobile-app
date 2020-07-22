@@ -2,13 +2,19 @@
 import React from 'react';
 import { View, StatusBar } from 'react-native';
 import ActivityScreen from './src/screens/ActivityScreen';
-import { Provider } from 'react-native-paper';
+
+import { Provider as ReduxProvider } from 'react-redux';
+import { Provider as PaperProvider } from 'react-native-paper';
+
+import store from './store';
 
 export default function App() {
   return (
-    <Provider>
-      <StatusBar barStyle="dark-content" backgroundColor={'#ff9900'} />
-      <ActivityScreen />
-    </Provider>
+    <ReduxProvider store={store}>
+      <PaperProvider>
+        <StatusBar barStyle="dark-content" backgroundColor={'#ff9900'} />
+        <ActivityScreen />
+      </PaperProvider>
+    </ReduxProvider>
   );
 }
