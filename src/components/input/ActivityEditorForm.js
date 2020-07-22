@@ -7,34 +7,34 @@ import FormTextInput from './FormTextInput';
 import PropTypes from 'prop-types';
 import util from '../../util';
 import DateTextInput from './DateTextInput';
+
 import { connect } from 'react-redux';
 
-const defaults = {
-  input: {
-    name: '',
-    category: '',
-    startDate: util.date.unixToDate(Date.now()),
-    endDate: util.date.unixToDate(Date.now()),
-    distance: ''
-  }, messages: {
-    name: '',
-    category: '',
-    startDate: '',
-    endDate: '',
-    distance: ''
-  }
-};
-
 const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfirm, onHide }) => {
+  const defaults = {
+    input: {
+      name: '',
+      category: '',
+      start_date: util.date.unixToDate(Date.now()),
+      end_date: util.date.unixToDate(Date.now()),
+      distance: ''
+    }, messages: {
+      name: '',
+      category: '',
+      start_date: '',
+      end_date: '',
+      distance: ''
+    }
+  };
+
   useEffect(() => {
     if (selectedActivityIndex >= 0) {
-      console.log(details.startDate, details.endDate);
       setInput({
-        name: details.name,
-        category: details.category,
-        startDate: util.date.unixToDate(details.startDate),
-        endDate: util.date.unixToDate(details.endDate),
-        distance: details.distance
+        name: String(details.name),
+        category: String(details.category),
+        start_date: String(util.date.unixToDate(details.start_date)),
+        end_date: String(util.date.unixToDate(details.end_date)),
+        distance: String(details.distance || '')
       });
     }
   }, [selectedActivityIndex]);
@@ -72,24 +72,24 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
           msg.category = '';
         }
         break;
-      case 'startDate':
+      case 'start_date':
         // start date
         if (value === '') {
-          msg.startDate = 'Start date is empty';
+          msg.start_date = 'Start date is empty';
         } else if (!dtRegex.test(value)) {
-          msg.startDate = 'Start date is incorrect';
+          msg.start_date = 'Start date is incorrect';
         } else {
-          msg.startDate = '';
+          msg.start_date = '';
         }
         break;
-      case 'endDate':
+      case 'end_date':
         // category
         if (value === '') {
-          msg.endDate = 'End date is empty';
+          msg.end_date = 'End date is empty';
         } else if (!dtRegex.test(value)) {
-          msg.endDate = 'End date is incorrect';
+          msg.end_date = 'End date is incorrect';
         } else {
-          msg.endDate = '';
+          msg.end_date = '';
         }
         break;
       case 'distance':
@@ -148,22 +148,22 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
         helperText={messages.category}
       />
       <DateTextInput
-        value={input.startDate}
-        defaultValue={util.date.unixToDate(details.startDate)}
+        value={input.start_date}
+        defaultValue={util.date.unixToDate(details.start_date)}
         placeholder="Start date"
-        onChangeText={text => handleInput('startDate', text)}
-        helperVisible={messages.startDate !== ''}
+        onChangeText={text => handleInput('start_date', text)}
+        helperVisible={messages.start_date !== ''}
         helperType={'error'}
-        helperText={messages.startDate}
+        helperText={messages.start_date}
       />
       <DateTextInput
-        value={input.endDate}
-        defaultValue={util.date.unixToDate(details.endDate)}
+        value={input.end_date}
+        defaultValue={util.date.unixToDate(details.end_date)}
         placeholder="End date"
-        onChangeText={text => handleInput('endDate', text)}
-        helperVisible={messages.endDate !== ''}
+        onChangeText={text => handleInput('end_date', text)}
+        helperVisible={messages.end_date !== ''}
         helperType={'error'}
-        helperText={messages.endDate}
+        helperText={messages.end_date}
       />
       <FormTextInput
         value={input.distance}
