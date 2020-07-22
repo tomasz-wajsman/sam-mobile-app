@@ -12,13 +12,11 @@ const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
     onModify('edit', activityID);
   };
 
-  console.info(activities);
-
   return (
     <View>
       <Title>Activities</Title>
       {
-        activities.items.map((activity, index) => 
+        activities.map((activity, index) => 
         <ActivitiesListItem
           key={String(index)}
           details={activity}
@@ -32,7 +30,7 @@ const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
 };
 
 const mapStateToProps = state => {
-  return { activities: state.activities }
+  return { activities: state.activities.items }
 };
 const mapDispatchToProps = {
 
