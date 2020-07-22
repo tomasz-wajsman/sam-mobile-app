@@ -7,12 +7,13 @@ import PropTypes from 'prop-types';
 import styles from '../../styles';
 import util from '../../util';
 
-const DateTextInput = ({ defaultValue, placeholder, onChangeText, helperVisible, helperType, helperText, additionalHelperText }) => {
+const DateTextInput = ({ value, placeholder, onChangeText, helperVisible, helperType, helperText, additionalHelperText }) => {
   return (
     <View style={styles.layout.spacing}>
       <PaperTextInput
+        value={value}
+        defaultValue={value}
         style={{ padding: 5, height: 24 }}
-        defaultValue={defaultValue || util.date.unixToDate(Date.now())}
         placeholder={placeholder}
         onChangeText={onChangeText}
       />

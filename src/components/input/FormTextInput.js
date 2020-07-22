@@ -5,20 +5,19 @@ import { HelperText, TextInput as PaperTextInput } from 'react-native-paper';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
-const FormTextInput = ({ defaultValue, placeholder, onChangeText, helperVisible, helperType, helperText, additionalHelperText }) => {
+const FormTextInput = ({ value, placeholder, onChangeText, helperVisible, helperType, helperText, additionalHelperText }) => {
   return (
     <View style={styles.layout.spacing}>
       <PaperTextInput
         style={{ padding: 5, height: 24 }}
-        defaultValue={defaultValue}
+        defaultValue={value}
+        value={value}
         placeholder={placeholder}
         onChangeText={onChangeText}
       />
       {
         additionalHelperText
-          ? <HelperText visible={true}>
-            {additionalHelperText}
-          </HelperText>
+          ? <HelperText visible={true}>{additionalHelperText}</HelperText>
           : <View />
       }
       <HelperText
