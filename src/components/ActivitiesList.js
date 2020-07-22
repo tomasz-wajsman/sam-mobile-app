@@ -11,13 +11,16 @@ const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
   const modify = activityID => {
     onModify('edit', activityID);
   };
+
+  console.info(activities);
+
   return (
     <View>
       <Title>Activities</Title>
       {
-        activities.items.map(activity => 
+        activities.items.map((activity, index) => 
         <ActivitiesListItem
-          key={activity['_id']}
+          key={String(index)}
           details={activity}
           onPressEdit={() => modify(activity['_id'])}
           onDeleteActivity={onDeleteActivity}
