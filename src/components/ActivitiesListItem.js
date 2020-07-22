@@ -22,8 +22,8 @@ const ActivitiesListItem = ({ details, onPressEdit, onDeleteActivity }) => {
       <Card.Content>
         <List.Accordion title={"Details"}>
           <List.Item title={`Category: ${details.category || "uncategorized"}`} />
-          <List.Item title={`Start date: ${util.date.formatDateTime(details.startDate)}`} />
-          <List.Item title={`End date: ${util.date.formatDateTime(details.endDate)}`} />
+          <List.Item title={`Start date: ${util.date.unixToDate(details.startDate)}`} />
+          <List.Item title={`End date: ${util.date.unixToDate(details.endDate)}`} />
           {details.distance ? <List.Item title={`Distance: ${details.distance} meters`} /> : <></>}
         </List.Accordion>
         <View style={styles.layout.horizontal}>
