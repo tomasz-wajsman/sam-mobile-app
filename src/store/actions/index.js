@@ -1,4 +1,8 @@
 /* eslint-disable import/prefer-default-export */
+export const setActivities = activities => ({
+  type: 'ACTIVITIES_FETCHED',
+  activities
+});
 export const setActivityIndex = activityIndex => ({
   type: 'ACTIVITY_SET_INDEX',
   activityIndex

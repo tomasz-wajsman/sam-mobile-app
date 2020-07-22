@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+
 const initState = {
   items: [],
   selectedActivityIndex: -1
@@ -8,6 +9,9 @@ export const activities = (state = initState, action) => {
   const newState = { ...state };
   switch (action.type) {
     default: return state;
+    case 'ACTIVITIES_FETCHED':
+      newState.items = action.activities;
+      break;
     case 'ACTIVITY_SET_INDEX':
       newState.selectedActivityIndex = action.activityIndex;
       break;
