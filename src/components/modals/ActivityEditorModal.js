@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import ActivityEditorForm from '../input/ActivityEditorForm';
 
-const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss, selectedActivityID }) => {
+const ActivityEditorModal = ({ activities, selectedActivityIndex, visible, editing, onConfirm, onDismiss }) => {
 
   if (visible) {
     return (
@@ -17,6 +17,7 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss, 
               <Card.Content>
                 <ActivityEditorForm
                   editMode={editing}
+                  details={activities[selectedActivityIndex]}
                   onConfirm={onConfirm}
                   onHide={onDismiss}
                 />
@@ -32,8 +33,8 @@ const ActivityEditorModal = ({ visible, editing, details, onConfirm, onDismiss, 
 
 const mapStateToProps = state => {
   return {
-    activities: state.activities.item,
-    selectedActivityID: state.activities.selectedActivityID
+    activities: state.activities.items,
+    selectedActivityIndex: state.activities.selectedActivityIndex
   }
 };
 
