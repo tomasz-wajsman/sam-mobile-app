@@ -10,7 +10,7 @@ import { setActivities, setActivityIndex, addActivity, modifyActivity, deleteAct
 
 // API client
 import SamClient from '../clients/sam';
-import { ActivityIndicator, Paragraph, Card, Button } from 'react-native-paper';
+import { ActivityIndicator, Paragraph, Card, Button, Snackbar } from 'react-native-paper';
 const client = new SamClient(require('../config/config.json').api_url);
 
 const ActivityScreen = ({
@@ -47,6 +47,11 @@ const ActivityScreen = ({
       });
   };
 
+  // snackbar
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarStyle, setSnackbarStyle] = useState('success');
+  const [snackbarContent, setSnackbarContent] = useState('My content');
+
   useEffect(() => {
     // load the activities
     loadActivities();
@@ -70,9 +75,14 @@ const ActivityScreen = ({
       if (res) {
         addActivity(res);
         setModifyModalVisible(false);
+        setSnackbarStyle('success');
+        setSnackbarContent('The activity was created successfully');
       }
     } catch (e) {
-      console.error(err);
+      setSnackbarStyle('error');
+      setSnackbarContent('An error has occurred during creating the activity');
+    } finally {
+      setSnackbarVisible(true);
     }
   };
   const handleEdit = async (activityID, activityDetails) => {
@@ -88,23 +98,31 @@ const ActivityScreen = ({
         modifyActivity(selectedActivityIndex, details);
         setModifyModalVisible(false);
         setActivityIndex(-1);
+        setSnackbarStyle('success');
+        setSnackbarContent('The activity was edited successfully');
       }
     } catch (err) {
-      console.error(err);
+      setSnackbarStyle('error');
+      setSnackbarContent('An error has occurred during editing the activity');
+    } finally {
+      setSnackbarVisible(true);
     }
   };
-  const handleDelete = activityID => {
+  const handleDelete = async activityID => {
     // delete an activity
-    console.log(activityID)
-    client.deleteActivity(activityID)
-      .then(res => {
-        if (res) {
-          deleteActivity(getActivityIndexByID(activityID));
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    try {
+      const res = await client.deleteActivity(activityID);
+      if (res) {
+        deleteActivity(getActivityIndexByID(activityID));
+        setSnackbarStyle('success');
+        setSnackbarContent('The activity was deleted successfully');
+      }
+    } catch (e) {
+      setSnackbarStyle('error');
+      setSnackbarContent('An error has occurred during deleting the activity');
+    } finally {
+      setSnackbarVisible(true);
+    }
   };
   const handleDismissEditorModal = () => {
     setModifyModalVisible(false);
@@ -171,14 +189,27 @@ const ActivityScreen = ({
 
   // show the list
   return (
-    <ScrollView style={styles.layout.container}>
-      {renderModal()}
-      <ActivitiesList
-        items={activities}
-        onModify={handleModify}
-        onDeleteActivity={handleDelete}
-      />
-    </ScrollView>
+    <>
+      <ScrollView style={styles.layout.container}>
+        {renderModal()}
+        <ActivitiesList
+          items={activities}
+          onModify={handleModify}
+          onDeleteActivity={handleDelete}
+        />
+      </ScrollView>
+      <Snackbar
+        style={{ flex: 1, justifyContent: 'space-between' }}
+        duration={3000}
+        onDismiss={() => setSnackbarVisible(false)}
+        style={{
+          backgroundColor: snackbarStyle === 'success' ? 'green' : 'red'
+        }}
+        visible={snackbarVisible}
+      >
+        {snackbarContent}
+      </Snackbar>
+    </>
   )
 };
 
