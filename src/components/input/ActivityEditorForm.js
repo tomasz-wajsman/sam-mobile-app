@@ -177,6 +177,7 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
         value={input.distance}
         defaultValue={details.distance}
         placeholder="Distance"
+        additionalHelperText="(optional)"
         onChangeText={text => handleInput('distance', text)}
         helperVisible={messages.distance !== ''}
         helperType={'error'}
