@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card, Title, List, Button, Headline, Paragraph } from 'react-native-paper';
-import ActivitiesListItem from './ActivitiesListItem';
 import { connect } from 'react-redux';
+import { Card, Title, List, Button, Headline, Paragraph } from 'react-native-paper';
+
+import ActivitiesListItem from './ActivitiesListItem';
 import styles from '../styles';
 
 const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
