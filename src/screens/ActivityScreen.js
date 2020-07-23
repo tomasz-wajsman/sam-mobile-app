@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Alert } from 'react-native';
-import styles from '../styles';
-import ActivitiesList from '../components/ActivitiesList';
-import ActivityEditorModal from '../components/modals/ActivityEditorModal';
+import { ActivityIndicator, Paragraph, Card, Button, Snackbar, Title } from 'react-native-paper';
+
 import util from '../util';
 import { connect } from 'react-redux';
 
 import { setActivities, setActivityIndex, addActivity, modifyActivity, deleteActivity } from '../store/actions';
 
+import ActivitiesList from '../components/ActivitiesList';
+import ActivityEditorModal from '../components/modals/ActivityEditorModal';
+
+import styles from '../styles';
+
 // API client
 import SamClient from '../clients/sam';
-import { ActivityIndicator, Paragraph, Card, Button, Snackbar, Title } from 'react-native-paper';
 const client = new SamClient(require('../config/config.json').api_url);
 
 const ActivityScreen = ({
