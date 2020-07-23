@@ -11,6 +11,10 @@ const theme = {
     disabled: '#868179',
     placeholder: '#f99806',
     backdrop: '#f3f2f2'
+  },
+  animation: {
+    ...DefaultTheme.animation,
+    scale: 1
   }
 };
 
