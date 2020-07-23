@@ -10,6 +10,7 @@ import DateTextInput from './DateTextInput';
 
 import { connect } from 'react-redux';
 import styles from '../../styles';
+import SamClient from '../../clients/sam';
 
 const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfirm, onHide }) => {
   const defaults = {
@@ -111,7 +112,13 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
   };
 
   const submitForm = () => {
-    if (editMode) {
+    // check if data is correct
+    if (!SamClient.checkActivityDetails(input)) {
+      util.alert.showAlert(
+        'Data validation error',
+        'One or more of the mandatory details is missing or incorrect. Please check them.'
+      )
+    } else if (editMode) {
       // edit an existing activity
       console.log(details);
       onConfirm(details['_id'], input);
