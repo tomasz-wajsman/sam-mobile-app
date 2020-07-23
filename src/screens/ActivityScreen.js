@@ -121,7 +121,6 @@ const ActivityScreen = ({
   const handleDelete = async activityID => {
     // delete an activity
     try {
-      console.log('handle delete')
       const res = await client.deleteActivity(activityID);
       if (res) {
         deleteActivity(getActivityIndexByID(activityID));

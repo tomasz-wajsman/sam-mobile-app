@@ -117,10 +117,9 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
       util.alert.showAlert(
         'Data validation error',
         'One or more of the mandatory details is missing or incorrect. Please check them.'
-      )
+      );
     } else if (editMode) {
       // edit an existing activity
-      console.log(details);
       onConfirm(details['_id'], input);
     } else {
       // add a new activity
