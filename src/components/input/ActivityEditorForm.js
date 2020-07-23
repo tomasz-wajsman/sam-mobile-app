@@ -112,6 +112,7 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
   const submitForm = () => {
     if (editMode) {
       // edit an existing activity
+      console.log(details);
       onConfirm(details['_id'], input);
     } else {
       // add a new activity

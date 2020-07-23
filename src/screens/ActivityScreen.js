@@ -77,6 +77,9 @@ const ActivityScreen = ({
         setModifyModalVisible(false);
         setSnackbarStyle('success');
         setSnackbarContent('The activity was created successfully');
+      } else {
+        setSnackbarStyle('error');
+        setSnackbarContent('The activity was not created');
       }
     } catch (e) {
       setSnackbarStyle('error');
@@ -92,6 +95,7 @@ const ActivityScreen = ({
       // convert dates to Unix format
       details.start_date = util.date.dateToUnix(activityDetails.start_date);
       details.end_date = util.date.dateToUnix(activityDetails.end_date);
+      details['_id'] = activityID;
       // modify the activity
       const res = await client.modifyActivity(activityID, details);
       if (res) {
@@ -100,6 +104,9 @@ const ActivityScreen = ({
         setActivityIndex(-1);
         setSnackbarStyle('success');
         setSnackbarContent('The activity was edited successfully');
+      } else {
+        setSnackbarStyle('error');
+        setSnackbarContent('The activity was not edited');
       }
     } catch (err) {
       setSnackbarStyle('error');
@@ -111,11 +118,15 @@ const ActivityScreen = ({
   const handleDelete = async activityID => {
     // delete an activity
     try {
+      console.log('handle delete')
       const res = await client.deleteActivity(activityID);
       if (res) {
         deleteActivity(getActivityIndexByID(activityID));
         setSnackbarStyle('success');
         setSnackbarContent('The activity was deleted successfully');
+      } else {
+        setSnackbarStyle('error');
+        setSnackbarContent('The activity was not deleted');
       }
     } catch (e) {
       setSnackbarStyle('error');
