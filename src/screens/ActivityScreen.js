@@ -10,7 +10,7 @@ import { setActivities, setActivityIndex, addActivity, modifyActivity, deleteAct
 
 // API client
 import SamClient from '../clients/sam';
-import { ActivityIndicator, Paragraph, Card, Button, Snackbar } from 'react-native-paper';
+import { ActivityIndicator, Paragraph, Card, Button, Snackbar, Title } from 'react-native-paper';
 const client = new SamClient(require('../config/config.json').api_url);
 
 const ActivityScreen = ({
@@ -203,6 +203,7 @@ const ActivityScreen = ({
     <>
       <ScrollView style={styles.layout.container}>
         {renderModal()}
+        <Title>Sport activities</Title>
         <ActivitiesList
           items={activities}
           onModify={handleModify}

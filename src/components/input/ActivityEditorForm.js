@@ -9,6 +9,7 @@ import util from '../../util';
 import DateTextInput from './DateTextInput';
 
 import { connect } from 'react-redux';
+import styles from '../../styles';
 
 const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfirm, onHide }) => {
   const defaults = {
@@ -175,8 +176,20 @@ const ActivityEditorForm = ({ selectedActivityIndex, details, editMode, onConfir
         helperType={'error'}
         helperText={messages.distance}
       />
-      <Button onPress={() => submitForm()}>{editMode ? 'SAVE' : 'ADD'}</Button>
-      <Button onPress={hideForm}>CANCEL</Button>
+      <Button
+        mode="contained"
+        style={styles.layout.button}
+        onPress={() => submitForm()}
+      >
+        {editMode ? 'SAVE' : 'ADD'}
+      </Button>
+      <Button
+        mode="contained"
+        style={styles.layout.button}
+        onPress={hideForm}
+      >
+        CANCEL
+      </Button>
     </View>
   );
 };

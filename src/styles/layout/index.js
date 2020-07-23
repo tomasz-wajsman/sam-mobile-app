@@ -10,6 +10,9 @@ const layout = StyleSheet.create({
   },
   spacing: {
     marginBottom: 5
+  },
+  button: {
+    marginVertical: 5
   }
 });
 export default layout;

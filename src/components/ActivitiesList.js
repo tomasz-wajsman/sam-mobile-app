@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card, Title, List, Button } from 'react-native-paper';
+import { Card, Title, List, Button, Headline, Paragraph } from 'react-native-paper';
 import ActivitiesListItem from './ActivitiesListItem';
 import { connect } from 'react-redux';
+import styles from '../styles';
 
 const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
   const add = () => {
@@ -12,20 +13,40 @@ const ActivitiesList = ({ activities, onModify, onDeleteActivity }) => {
     onModify('edit', activityID);
   };
 
+  if (activities.length === 0) {
+    // show no activities message
+    return (
+      <>
+        <Paragraph>No activities added.</Paragraph>
+        <Button
+          style={styles.layout.button}
+          mode="contained"
+          onPress={() => add()}
+        >
+          Add a new entry
+        </Button>
+      </>
+    );
+  }
   return (
-    <View>
-      <Title>Activities</Title>
+    <>
       {
-        activities.map((activity, index) => 
-        <ActivitiesListItem
-          key={String(index)}
-          details={activity}
-          onPressEdit={() => modify(activity['_id'])}
-          onDeleteActivity={onDeleteActivity}
-        />)
+        activities.map((activity, index) =>
+          <ActivitiesListItem
+            key={String(index)}
+            details={activity}
+            onPressEdit={() => modify(activity['_id'])}
+            onDeleteActivity={onDeleteActivity}
+          />)
       }
-      <Button onPress={() => add()}>Add a new entry</Button>
-    </View>
+      <Button
+        style={styles.layout.button}
+        mode="contained"
+        onPress={() => add()}
+      >
+        Add a new entry
+        </Button>
+    </>
   );
 };
 
