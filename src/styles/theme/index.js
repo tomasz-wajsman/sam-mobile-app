@@ -14,7 +14,7 @@ const theme = {
   },
   animation: {
     ...DefaultTheme.animation,
-    scale: 1
+    scale: 0.5
   }
 };
 
