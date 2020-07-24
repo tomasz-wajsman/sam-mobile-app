@@ -11,9 +11,10 @@ This React Native Expo application allows the user to manage their sport activit
 
 ### How to use this application?
 1. Clone the repository and the *Sports Activity Manager Backend* server
-2. Setup the server
-3. Change the Sports Activity Manager API URL
-4. Type *npm start* to start the application and run it on the emulator or real device.
+2. Type *npm install* to download the dependencies
+3. Setup the server
+4. Change the Sports Activity Manager API URL
+5. Type *npm start* to start the application and run it on the emulator or real device.
 
 ### Required data for all activities
 * name (for example *football training*)
